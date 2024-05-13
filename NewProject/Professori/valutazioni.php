@@ -13,6 +13,10 @@
                 <li class="nav-item"><a class="nav-link text-primary" href="carica.php" class="menu">Carica</a></li>
                 <li class="nav-item"><a class="nav-link active text-primary" href="valutazioni.php" class="menu">Valutazioni</a></li>
             </ul>
+
+            <ul class="nav nav-underline d-flex">
+                <li class="nav-item"><a class="nav-link text-primary" href="http://localhost/NewProject/index.html">Log Out</a></li>
+            </ul>
         </div>
     </nav>
 
@@ -23,7 +27,7 @@
     <?php require('voti.php');?>
 
     <div class="container-fluid text-center fixed-bottom bg-secondary text-white p-5">
-        <footer class="mainFooter">
+        <footer>
             <small>©2024 Milazzotto Simone. Designed by Milazzotto Simone</small>
         </footer>
     </div>

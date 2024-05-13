@@ -35,11 +35,16 @@ if($res = $connessione->query($tab1)){
                 ON FK_Studente = Codice_Studente
                 WHERE FK_Studente = \"$c\"";
         if($resq1 = $connessione->query($q1)){
-            echo "<body>
+            echo "<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js'></script>
+            <body style:'padding-bottom: 1500px !important'>
             <nav class='navbar sticky-top bg-body-tertiary'>
                 <div class='container-fluid'>
                     <ul class='nav nav-underline'>
-                        <li class='nav-item'><a class='nav-link text-primary' href='http://localhost/NewProject/index.html' class='menu'>Home page</a></li>
+                        <li class='nav-item'><a class='nav-link active text-primary' aria-current:'page' href='#'>Home page</a></li>
+                    </ul>
+
+                    <ul class='nav nav-underline d-flex'>
+                        <li class='nav-item'><a class='nav-link text-primary' href='http://localhost/NewProject/index.html'>Log Out</a></li>
                     </ul>
                 </div>
             </nav>
@@ -50,7 +55,7 @@ if($res = $connessione->query($tab1)){
             if($resq1->num_rows > 0){
                 echo"<table class='table'>
                 <thead>
-                <tr class='prova'>
+                <tr>
                 <th>Valutazione</th>
                 <th>Descrizione</th>
                 <th>Cognome Professore</th>
@@ -59,7 +64,7 @@ if($res = $connessione->query($tab1)){
                 while($row = $resq1->fetch_array()){
                     echo"
                     <tr>
-                    <td>" . $row["Valutazione"] . "</td>
+                    <td class='table-success'>" . $row["Valutazione"] . "</td>
                     <td>" . $row["Descrizione"] . "</td>
                     <td>" . $row["Cognome"] . "</td>
                     <td>" . $row["Nome"] . "</td>
@@ -82,11 +87,43 @@ if($res = $connessione->query($tab1)){
                 </div>
             ";
             while($rowm = $resm->fetch_array()){
-                echo "<div class='container-md text-center'>" . number_format((float)$rowm['AVG(Valutazione)'], 2, '.', '') . "</div>";
+                echo "<div id='media' class='container-md text-center'>" . number_format((float)$rowm['AVG(Valutazione)'], 2, '.', '') . "</div>";
+                echo "<canvas id='myChart' style='width:100%;max-width:600px;margin:auto;'></canvas>
+                <script>
+                    const media = document.getElementById('media');
+                    var prova = 10 - media.innerHTML;
+                    var ctx = document.getElementById('myChart').getContext('2d');
+                    var gradient = ctx.createLinearGradient(0, 0, 0, 400);
+
+                    var percent;
+                    if (media.innerHTML < 5) {
+                        percent = media.innerHTML / 5;
+                        gradient.addColorStop(0, 'red');
+                        gradient.addColorStop(percent, 'red');
+                    } else if (media.innerHTML < 6) {
+                        percent = (media.innerHTML - 5) / 1;
+                        gradient.addColorStop(0, 'red');
+                        gradient.addColorStop(percent, 'orange');
+                    } else {
+                        percent = (media.innerHTML - 6) / 4;
+                        gradient.addColorStop(0, 'orange');
+                        gradient.addColorStop(percent, 'lime');
+                    }
+
+                    new Chart('myChart', {
+                        type: 'doughnut',
+                        data: {
+                            datasets: [{
+                                backgroundColor: [gradient],
+                                data: [media.innerHTML, prova]
+                            }]
+                        },
+                    });
+                </script>";
             }
         }
         echo"
-            <div class='container-fluid text-center fixed-bottom bg-secondary text-white p-5'>
+            <div class='container-fluid text-center bottom bg-secondary text-white p-5 flex-grow mt-5'>
                 <footer>
                     <small>©2024 Milazzotto Simone. Designed by Milazzotto Simone</small>
                 </footer>

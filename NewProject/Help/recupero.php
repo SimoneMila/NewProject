@@ -16,6 +16,9 @@ if($connessione === false){
 $valore = $_POST['checkbox'];
 $email = $connessione->real_escape_string($_POST['email']);
 
+/*$msg;
+$headers = "From: simone.milazzotto@itisgrassi.edu.it";*/
+
 $q0 = "SELECT * FROM Studenti WHERE Email = \"$email\"";
 
 if($res = $connessione->query($q0)){
@@ -27,7 +30,9 @@ if($res = $connessione->query($q0)){
         if($res = $connessione->query($q1)){
             if($res->num_rows > 0){
                 while($row = $res->fetch_array()){
-                echo "" . $valore . ": " . $row[$valore] . "";
+                    /*$msg = "" . $valore . ": " . $row[$valore] . "";
+                    mail($email, "Recupero", $msg, $headers);*/
+                    echo "" . $valore . ": " . $row[$valore] . "";
                 }
             }else{
                 echo "Email Errata";
@@ -45,7 +50,9 @@ if($res = $connessione->query($q0)){
         if($res = $connessione->query($q1)){
             if($res->num_rows > 0){
                 while($row = $res->fetch_array()){
-                echo "" . $valore . ": " . $row[$valore] . "";
+                    /*$msg = "" . $valore . ": " . $row[$valore] . "";
+                    mail($email, "Recupero", $msg, $headers);*/
+                    echo "" . $valore . ": " . $row[$valore] . "";
                 }
             }else{
                 echo "Email Errata";

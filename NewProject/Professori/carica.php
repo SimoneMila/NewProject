@@ -13,6 +13,10 @@
                 <li class="nav-item"><a class="nav-link active text-primary" aria-current="page" href="#">Carica</a></li>
                 <li class="nav-item"><a class="nav-link text-primary" href="http://localhost/NewProject/Professori/valutazioni.php">Valutazioni</a></li>
             </ul>
+
+            <ul class="nav nav-underline d-flex">
+                <li class="nav-item"><a class="nav-link text-primary" href="http://localhost/NewProject/index.html">Log Out</a></li>
+            </ul>
         </div>
     </nav>
 

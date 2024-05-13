@@ -32,6 +32,10 @@ if($connessione->query($q1) === true){
                 <li class='nav-item'><a class='nav-link text-primary' href='carica.php'>Carica</a></li>
                 <li class='nav-item'><a class='nav-link text-primary' href='valutazioni.php'>Valutazioni</a></li>
             </ul>
+
+            <ul class='nav nav-underline d-flex'>
+                <li class='nav-item'><a class='nav-link text-primary' href='http://localhost/NewProject/index.html'>Log Out</a></li>
+            </ul>
         </div>
     </nav>
 

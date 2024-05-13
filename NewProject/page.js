@@ -18,18 +18,18 @@ function checkpas(){
     radiopassword.checked = true;
 }*/
 
-/*const voti = document.getElementsByClassName('table-success');
+const voti = document.getElementsByClassName('table-success');
 
 document.addEventListener("DOMContentLoaded", function(){
     for(let i = 0; i < voti.length; i++){
         if(voti[i].innerHTML < "5"){
             voti[i].classList.add('table-danger');
-        }else if(voti[i].innerHTML == "5" | voti[i].innerHTML == "5.5"){
+        }else if(voti[i].innerHTML >= "5" && voti[i].innerHTML <= "5.9"){
             voti[i].classList.add('table-warning');
         }
     }
 });
-
+/*
 const media = document.getElementById('media');
 
 document.addEventListener("DOMContentLoaded", function(){
