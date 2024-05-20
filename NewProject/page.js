@@ -1,23 +1,3 @@
-/*function getCod(){
-    linkcodice = document.getElementById('lcodice');
-    return linkcodice;
-}
-
-function getPas(){
-    linkpassword = document.getElementById('lpassword');
-    return linkpassword;
-}
-
-function checkcod(){
-    radiocodice = document.getElementById('rpassword');
-    radiocodice.checked = true;
-}
-
-function checkpas(){
-    radiopassword = document.getElementById('rcodice');
-    radiopassword.checked = true;
-}*/
-
 const voti = document.getElementsByClassName('table-success');
 
 document.addEventListener("DOMContentLoaded", function(){
@@ -29,9 +9,18 @@ document.addEventListener("DOMContentLoaded", function(){
         }
     }
 });
-/*
-const media = document.getElementById('media');
 
-document.addEventListener("DOMContentLoaded", function(){
-    document.getElementById('grafico').style.backgroundImage = 'conic-gradient(' + 'blue ' + media.innerHTML * 36 + 'deg,' + 'white ' + media.innerHTML * 36 + 'deg' + ')';
-});*/
+function currentdate(){
+    let now = new Date();
+    let year = now.getFullYear();
+    let month = now.getMonth() + 1;
+    let day = now.getDate();
+    if(month < 10){
+        month = "0" + month;
+    }
+    let datetime = year + "-" + month + "-" + day;
+    let mindatetime = year - 1 + "-09-01";
+    document.getElementById("data").setAttribute("max", datetime);
+    document.getElementById("data").setAttribute("value", datetime);
+    document.getElementById("data").setAttribute("min", mindatetime);
+}

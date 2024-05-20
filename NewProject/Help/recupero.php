@@ -30,8 +30,6 @@ if($res = $connessione->query($q0)){
         if($res = $connessione->query($q1)){
             if($res->num_rows > 0){
                 while($row = $res->fetch_array()){
-                    /*$msg = "" . $valore . ": " . $row[$valore] . "";
-                    mail($email, "Recupero", $msg, $headers);*/
                     echo "" . $valore . ": " . $row[$valore] . "";
                 }
             }else{
@@ -50,8 +48,6 @@ if($res = $connessione->query($q0)){
         if($res = $connessione->query($q1)){
             if($res->num_rows > 0){
                 while($row = $res->fetch_array()){
-                    /*$msg = "" . $valore . ": " . $row[$valore] . "";
-                    mail($email, "Recupero", $msg, $headers);*/
                     echo "" . $valore . ": " . $row[$valore] . "";
                 }
             }else{

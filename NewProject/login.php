@@ -123,7 +123,7 @@ if($res = $connessione->query($tab1)){
             }
         }
         echo"
-            <div class='container-fluid text-center bottom bg-secondary text-white p-5 flex-grow mt-5'>
+            <div class='container-fluid text-center fixed-bottom bg-secondary text-white p-5 mt-5'>
                 <footer>
                     <small>©2024 Milazzotto Simone. Designed by Milazzotto Simone</small>
                 </footer>

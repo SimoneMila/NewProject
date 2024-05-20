@@ -6,7 +6,7 @@
     <title>Professori</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
-<body>
+<body onload="currentdate()">
     <nav class="navbar sticky-top bg-body-tertiary">
         <div class="container-fluid">
             <ul class="nav nav-underline">
@@ -72,18 +72,25 @@
                     <label for="valutazione" class="form-label">Valutazione</label>
                     <input type="number" class="form-control" id="valutazione" name="valutazione" placeholder="Voto" min="2" max="10" step="0.5" required>
                 </div>
-                
+            </div>
+
+            <div class="row justify-content-center mb-4">
                 <div class="col-3">
                     <label for="descrizione" class="form-label">Descrizione</label>
                     <input type="text" class="form-control" id="descrizione" name="descrizione" placeholder="Descrizione" required>
                 </div>
+
+                <div class="col-3">
+                    <label for="data" class="form-label">Data</label>
+                    <input type="date" class="form-control" id="data" name="data" required>
+                </div>
             </div>
 
-                <div class="row justify-content-center text-center">
-                    <div class="col-2">
-                        <input type="submit" class="btn btn-dark" id="button" value="Invia">
-                    </div>
+            <div class="row justify-content-center text-center">
+                <div class="col-2">
+                    <input type="submit" class="btn btn-dark" id="button" value="Invia">
                 </div>
+            </div>
         </form>
     
     <div class="container-fluid text-center fixed-bottom bg-secondary text-white p-5">
@@ -91,5 +98,7 @@
             <small>©2024 Milazzotto Simone. Designed by Milazzotto Simone</small>
         </footer>
     </div>
+
+    <script src="http://localhost/NewProject/page.js"></script>
 </body>
 </html>
