@@ -17,12 +17,25 @@ if($connessione === false){
 
 $c = $_SESSION['codice'];
 
+$data = $_POST['data'];
 $v = $_POST['valutazione'];
-$d = $connessione->real_escape_string($_POST['descrizione']);
+$des = $connessione->real_escape_string($_POST['descrizione']);
 $cs = $_POST['studente'];
 
-$q1 = "INSERT INTO Voti(Valutazione, Descrizione, FK_Studente, FK_Professore)
-        VALUES($v, \"$d\", \"$cs\", \"$c\")";
+$q0 = "SELECT Materie.Nome
+        FROM Materie
+        INNER JOIN Professori
+        ON FK_Professore = Codice_Professore
+        WHERE FK_Professore = \"$c\"";
+
+if($res0 = $connessione->query($q0)){
+    while($row0 = $res0->fetch_array()){
+        $m = $row0["Nome"];
+    }
+}
+
+$q1 = "INSERT INTO Voti(Data, Valutazione, Materia, Descrizione, FK_Studente, FK_Professore)
+        VALUES(\"$data\", $v, \"$m\", \"$des\", \"$cs\", \"$c\")";
 
 if($connessione->query($q1) === true){
     echo "<body>
@@ -46,19 +59,20 @@ if($connessione->query($q1) === true){
     echo "Errore durante l'inserimento: " . $connessione->error;
 }
 
-$q2 = "SELECT Valutazione, Descrizione, Studenti.Cognome, Studenti.Nome
+$q2 = "SELECT Voti.Data, Voti.Valutazione, Voti.Descrizione, Studenti.Cognome, Studenti.Nome
         FROM Voti
         INNER JOIN Studenti
-        ON FK_Studente = Codice_Studente
+        ON Voti.FK_Studente = Studenti.Codice_Studente
         INNER JOIN Professori
-        ON FK_Professore = Codice_Professore
-        WHERE FK_Professore = \"$c\" AND FK_Studente = \"$cs\"
-        ORDER BY ID_Voto DESC";
+        ON Voti.FK_Professore = Professori.Codice_Professore
+        WHERE Voti.FK_Professore = \"$c\" AND Voti.FK_Studente = \"$cs\"
+        ORDER BY Voti.ID_Voto DESC";
 if($res = $connessione->query($q2)){
     if($res->num_rows > 0){
         echo"<table class='table'>
-            <thead class='thead'>
+            <thead>
             <tr>
+            <th>Data</th>
             <th>Valutazione</th>
             <th>Descrizione</th>
             <th>Cognome Studente</th>
@@ -66,23 +80,27 @@ if($res = $connessione->query($q2)){
             </tr></thead><tbody>";
             while($row = $res->fetch_array()){
                 echo"
-                <tr class='tr'>
-                <td class='votoVerde'>" . $row["Valutazione"] . "</td>
+                <tr>
+                <td>" . $row["Data"] . "</td>
+                <td class='table-success'>" . $row["Valutazione"] . "</td>
                 <td>" . $row["Descrizione"] . "</td>
                 <td>" . $row["Cognome"] . "</td>
                 <td>" . $row["Nome"] . "</td>
                 </tr>";
             }
         echo "</tbody></table>";
-        echo"
-        <div class='container-fluid text-center fixed-bottom bg-secondary text-white p-5'>
-            <footer>
-                <small>©2024 Milazzotto Simone. Designed by Milazzotto Simone</small>
-            </footer>
-        </div>
-
-        <script src='http://localhost/NewProject/page.js'></script></body>";
+    }else{
+        echo"Lo studente non ha ancora voti di questa materia";
     }
 }
+
+echo"
+    <div class='container-fluid text-center fixed-bottom bg-secondary text-white p-5'>
+        <footer>
+            <small>©2024 Milazzotto Simone. Designed by Milazzotto Simone</small>
+        </footer>
+    </div>
+
+    <script src='http://localhost/NewProject/page.js'></script></body>";
 
 ?>

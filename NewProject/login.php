@@ -24,58 +24,68 @@ if(!ctype_alnum($c) || !ctype_alnum($p)){
 
 $_SESSION['codice'] = $c;
 
+echo "
+<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js'></script>
+<body style:'padding-bottom: 1500px !important'>
+    <nav class='navbar sticky-top bg-body-tertiary'>
+        <div class='container-fluid'>
+            <ul class='nav nav-underline'>
+                <li class='nav-item'><a class='nav-link active text-primary' aria-current:'page' href='#'>Home page</a></li>
+            </ul>
+
+            <ul class='nav nav-underline d-flex'>
+                <li class='nav-item'><a class='nav-link text-primary' href='http://localhost/NewProject/index.html'>Log Out</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class='container-md text-center mb-5'>
+        <h1>Valutazioni</h1>
+    </div>";
+
 $tab1 = "SELECT * FROM Studenti WHERE Codice_Studente = \"$c\" AND Password = \"$p\"";
 if($res = $connessione->query($tab1)){
     if($res->num_rows > 0){
-        $q1 = "SELECT Valutazione, Descrizione, Professori.Cognome, Professori.Nome
+        $q1 = "SELECT Voti.Data, Voti.Valutazione, Voti.Descrizione, Professori.Cognome, Professori.Nome, (
+                    SELECT Materie.Nome
+                    FROM Materie
+                    WHERE Materie.FK_Professore = Voti.FK_Professore) AS MateriaNome
                 FROM Voti
                 INNER JOIN Professori
-                ON FK_Professore = Codice_Professore
+                ON Voti.FK_Professore = Professori.Codice_Professore
                 INNER JOIN Studenti
-                ON FK_Studente = Codice_Studente
-                WHERE FK_Studente = \"$c\"";
+                ON Voti.FK_Studente = Studenti.Codice_Studente
+                WHERE Voti.FK_Studente = \"$c\"";
         if($resq1 = $connessione->query($q1)){
-            echo "<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js'></script>
-            <body style:'padding-bottom: 1500px !important'>
-            <nav class='navbar sticky-top bg-body-tertiary'>
-                <div class='container-fluid'>
-                    <ul class='nav nav-underline'>
-                        <li class='nav-item'><a class='nav-link active text-primary' aria-current:'page' href='#'>Home page</a></li>
-                    </ul>
-
-                    <ul class='nav nav-underline d-flex'>
-                        <li class='nav-item'><a class='nav-link text-primary' href='http://localhost/NewProject/index.html'>Log Out</a></li>
-                    </ul>
-                </div>
-            </nav>
-
-            <div class='container-md text-center mb-5'>
-                <h1>Valutazioni</h1>
-            </div>";
-            if($resq1->num_rows > 0){
-                echo"<table class='table'>
-                <thead>
-                <tr>
-                <th>Valutazione</th>
-                <th>Descrizione</th>
-                <th>Cognome Professore</th>
-                <th>Nome Professore</th>
-                </tr></thead><tbody>";
-                while($row = $resq1->fetch_array()){
-                    echo"
-                    <tr>
-                    <td class='table-success'>" . $row["Valutazione"] . "</td>
-                    <td>" . $row["Descrizione"] . "</td>
-                    <td>" . $row["Cognome"] . "</td>
-                    <td>" . $row["Nome"] . "</td>
-                    </tr>";
+                if($resq1->num_rows > 0){
+                    while($row = $resq1->fetch_array()){
+                        echo"<div class='container-md text-center'><h3>" . $row["MateriaNome"] . "</h3></div>";
+                    
+                        echo"<table class='table'>
+                        <thead>
+                        <tr>
+                        <th>Data</th>
+                        <th>Valutazione</th>
+                        <th>Descrizione</th>
+                        <th>Cognome Professore</th>
+                        <th>Nome Professore</th>
+                        </tr></thead><tbody>";
+                    
+                        echo"
+                        <tr>
+                        <td>" . $row["Data"] . "</td>
+                        <td class='table-success'>" . $row["Valutazione"] . "</td>
+                        <td>" . $row["Descrizione"] . "</td>
+                        <td>" . $row["Cognome"] . "</td>
+                        <td>" . $row["Nome"] . "</td>
+                        </tr>";
+                    }
+                    echo"</tbody></table>";
+                }else{
+                    echo"Non hai ancora nessun voto!";
                 }
-                echo"</tbody></table>";
-            }else{
-                echo"Non hai ancora nessun voto!";
-            }
         }
-
+        
         $media = "SELECT AVG(Valutazione)
                     FROM Voti
                     INNER JOIN Studenti ON FK_Studente = Codice_Studente
@@ -106,7 +116,7 @@ if($res = $connessione->query($tab1)){
                         gradient.addColorStop(percent, 'orange');
                     } else {
                         percent = (media.innerHTML - 6) / 4;
-                        gradient.addColorStop(0, 'orange');
+                        gradient.addColorStop(0, 'lime');
                         gradient.addColorStop(percent, 'lime');
                     }
 
@@ -122,14 +132,6 @@ if($res = $connessione->query($tab1)){
                 </script>";
             }
         }
-        echo"
-            <div class='container-fluid text-center fixed-bottom bg-secondary text-white p-5 mt-5'>
-                <footer>
-                    <small>©2024 Milazzotto Simone. Designed by Milazzotto Simone</small>
-                </footer>
-            </div>";
-            
-        echo"<script src='http://localhost/NewProject/page.js'></script></body>";
     }else{
         $tab2 = "SELECT * FROM Professori WHERE Codice_Professore = \"$c\" AND Password = \"$p\"";
         if($res2 = $connessione->query($tab2)){
@@ -141,5 +143,14 @@ if($res = $connessione->query($tab1)){
         }
     }
 }
+
+echo"
+    <div class='container-fluid text-center bottom bg-secondary text-white p-5 mt-5'>
+        <footer>
+            <small>©2024 Milazzotto Simone. Designed by Milazzotto Simone</small>
+        </footer>
+    </div>";
+            
+echo"<script src='http://localhost/NewProject/page.js'></script></body>";
 
 ?>

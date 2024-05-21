@@ -17,7 +17,7 @@ if($connessione === false){
 
 $c = $_SESSION['codice'];
 
-$q2 = "SELECT Valutazione, Descrizione, Studenti.Cognome, Studenti.Nome
+$q2 = "SELECT Data, Valutazione, Descrizione, Studenti.Cognome, Studenti.Nome
         FROM Voti
         INNER JOIN Studenti
         ON FK_Studente = Codice_Studente
@@ -27,8 +27,9 @@ $q2 = "SELECT Valutazione, Descrizione, Studenti.Cognome, Studenti.Nome
 if($resq2 = $connessione->query($q2)){
     if($resq2->num_rows > 0){
         echo"<table class='table'>
-            <thead class='thead'>
+            <thead>
             <tr>
+            <th>Data</th>
             <th>Valutazione</th>
             <th>Descrizione</th>
             <th>Cognome Studente</th>
@@ -36,15 +37,18 @@ if($resq2 = $connessione->query($q2)){
             </tr></thead><tbody>";
             while($row = $resq2->fetch_array()){
                 echo"
-                <tr class='tr'>
-                <td class='votoVerde'>" . $row["Valutazione"] . "</td>
+                <tr>
+                <td>". $row["Data"] . "</td>
+                <td class='table-success'>" . $row["Valutazione"] . "</td>
                 <td>" . $row["Descrizione"] . "</td>
                 <td>" . $row["Cognome"] . "</td>
                 <td>" . $row["Nome"] . "</td>
                 </tr>";
             }
         echo"</tbody></table>";
-        echo"<body><script src='http://localhost/NewProject/page.js'></script></body>";
     }
 }
+
+echo"<body><script src='http://localhost/NewProject/page.js'></script></body>";
+
 ?>
