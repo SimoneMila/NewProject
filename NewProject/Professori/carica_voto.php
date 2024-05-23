@@ -21,21 +21,22 @@ $data = $_POST['data'];
 $v = $_POST['valutazione'];
 $des = $connessione->real_escape_string($_POST['descrizione']);
 $cs = $_POST['studente'];
+$m = $_POST['materia'];
 
-$q0 = "SELECT Materie.Nome
+/*$q0 = "SELECT Materie.Nome
         FROM Materie
         INNER JOIN Professori
         ON FK_Professore = Codice_Professore
-        WHERE FK_Professore = \"$c\"";
+        WHERE FK_Professore = '$c'";
 
 if($res0 = $connessione->query($q0)){
     while($row0 = $res0->fetch_array()){
         $m = $row0["Nome"];
     }
-}
+}*/
 
 $q1 = "INSERT INTO Voti(Data, Valutazione, Materia, Descrizione, FK_Studente, FK_Professore)
-        VALUES(\"$data\", $v, \"$m\", \"$des\", \"$cs\", \"$c\")";
+        VALUES('$data', $v, '$m', '$des', '$cs', '$c')";
 
 if($connessione->query($q1) === true){
     echo "<body>
@@ -65,7 +66,7 @@ $q2 = "SELECT Voti.Data, Voti.Valutazione, Voti.Descrizione, Studenti.Cognome, S
         ON Voti.FK_Studente = Studenti.Codice_Studente
         INNER JOIN Professori
         ON Voti.FK_Professore = Professori.Codice_Professore
-        WHERE Voti.FK_Professore = \"$c\" AND Voti.FK_Studente = \"$cs\"
+        WHERE Voti.FK_Professore = '$c' AND Voti.FK_Studente = '$cs'
         ORDER BY Voti.ID_Voto DESC";
 if($res = $connessione->query($q2)){
     if($res->num_rows > 0){
@@ -102,5 +103,4 @@ echo"
     </div>
 
     <script src='http://localhost/NewProject/page.js'></script></body>";
-
 ?>

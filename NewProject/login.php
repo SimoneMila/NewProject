@@ -1,6 +1,6 @@
 <?php
 
-echo"<head><link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'></head>";
+echo "<head><link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'></head>";
 
 session_start();
 
@@ -11,14 +11,14 @@ $db = "Project";
 
 $connessione = new mysqli($host, $user, $password, $db);
 
-if($connessione === false){
+if ($connessione === false) {
     die("Errore di connessione: " . $connessione->connect_error);
 }
 
 $c = $_POST['codice'];
 $p = $_POST['password'];
 
-if(!ctype_alnum($c) || !ctype_alnum($p)){
+if (!ctype_alnum($c) || !ctype_alnum($p)) {
     exit("Puoi inserire solo caratteri alfanumerici");
 }
 
@@ -43,25 +43,30 @@ echo "
         <h1>Valutazioni</h1>
     </div>";
 
-$tab1 = "SELECT * FROM Studenti WHERE Codice_Studente = \"$c\" AND Password = \"$p\"";
-if($res = $connessione->query($tab1)){
-    if($res->num_rows > 0){
-        $q1 = "SELECT Voti.Data, Voti.Valutazione, Voti.Descrizione, Professori.Cognome, Professori.Nome, (
-                    SELECT Materie.Nome
-                    FROM Materie
-                    WHERE Materie.FK_Professore = Voti.FK_Professore) AS MateriaNome
+$tab1 = "SELECT * FROM Studenti WHERE Codice_Studente = '$c' AND Password = '$p'";
+if ($res = $connessione->query($tab1)) {
+    if ($res->num_rows > 0) {
+        $q1 = "SELECT Voti.Data, Voti.Valutazione, Voti.Descrizione, Voti.Materia AS MateriaNome, Professori.Cognome, Professori.Nome
                 FROM Voti
                 INNER JOIN Professori
                 ON Voti.FK_Professore = Professori.Codice_Professore
-                INNER JOIN Studenti
-                ON Voti.FK_Studente = Studenti.Codice_Studente
-                WHERE Voti.FK_Studente = \"$c\"";
-        if($resq1 = $connessione->query($q1)){
-                if($resq1->num_rows > 0){
-                    while($row = $resq1->fetch_array()){
-                        echo"<div class='container-md text-center'><h3>" . $row["MateriaNome"] . "</h3></div>";
+                WHERE Voti.FK_Studente = '$c'
+                ORDER BY Voti.Materia";
+
+        if ($resq1 = $connessione->query($q1)) {
+            if ($resq1->num_rows > 0) {
+                $current_materia = null;
+
+                while ($row = $resq1->fetch_assoc()) {
+                    $materia = $row['MateriaNome'];
+
                     
-                        echo"<table class='table'>
+                    if ($materia !== $current_materia) {
+                        if ($current_materia !== null) {
+                            echo "</tbody></table>";
+                        }
+                        echo "<div class='container-md text-center'><h3>$materia</h3></div>";
+                        echo "<table class='table'>
                         <thead>
                         <tr>
                         <th>Data</th>
@@ -69,34 +74,40 @@ if($res = $connessione->query($tab1)){
                         <th>Descrizione</th>
                         <th>Cognome Professore</th>
                         <th>Nome Professore</th>
-                        </tr></thead><tbody>";
-                    
-                        echo"
-                        <tr>
-                        <td>" . $row["Data"] . "</td>
-                        <td class='table-success'>" . $row["Valutazione"] . "</td>
-                        <td>" . $row["Descrizione"] . "</td>
-                        <td>" . $row["Cognome"] . "</td>
-                        <td>" . $row["Nome"] . "</td>
-                        </tr>";
+                        </tr>
+                        </thead>
+                        <tbody>";
+
+                        $current_materia = $materia;
                     }
-                    echo"</tbody></table>";
-                }else{
-                    echo"Non hai ancora nessun voto!";
+
+                    
+                    echo "<tr>
+                    <td>" . $row["Data"] . "</td>
+                    <td class='table-success'>" . $row["Valutazione"] . "</td>
+                    <td>" . $row["Descrizione"] . "</td>
+                    <td>" . $row["Cognome"] . "</td>
+                    <td>" . $row["Nome"] . "</td>
+                    </tr>";
                 }
+
+                echo "</tbody></table>";
+            } else {
+                echo "Non hai ancora nessun voto!";
+            }
         }
-        
+
         $media = "SELECT AVG(Valutazione)
                     FROM Voti
                     INNER JOIN Studenti ON FK_Studente = Codice_Studente
-                    WHERE FK_Studente = \"$c\"";
-        if($resm = $connessione->query($media)){
+                    WHERE FK_Studente = '$c'";
+        if ($resm = $connessione->query($media)) {
             echo "
                 <div class='container-md text-center mb-4'>
                     <h2>Media:</h2>
                 </div>
             ";
-            while($rowm = $resm->fetch_array()){
+            while ($rowm = $resm->fetch_array()) {
                 echo "<div id='media' class='container-md text-center'>" . number_format((float)$rowm['AVG(Valutazione)'], 2, '.', '') . "</div>";
                 echo "<canvas id='myChart' style='width:100%;max-width:600px;margin:auto;'></canvas>
                 <script>
@@ -132,25 +143,23 @@ if($res = $connessione->query($tab1)){
                 </script>";
             }
         }
-    }else{
-        $tab2 = "SELECT * FROM Professori WHERE Codice_Professore = \"$c\" AND Password = \"$p\"";
-        if($res2 = $connessione->query($tab2)){
-            if($res2->num_rows > 0){
+    } else {
+        $tab2 = "SELECT * FROM Professori WHERE Codice_Professore = '$c' AND Password = '$p'";
+        if ($res2 = $connessione->query($tab2)) {
+            if ($res2->num_rows > 0) {
                 header("Location: http://localhost/NewProject/Professori/carica.php");
-            }else{
+            } else {
                 echo "Email o Password Errati";
             }
         }
     }
 }
 
-echo"
+echo "
     <div class='container-fluid text-center bottom bg-secondary text-white p-5 mt-5'>
         <footer>
             <small>©2024 Milazzotto Simone. Designed by Milazzotto Simone</small>
         </footer>
     </div>";
-            
-echo"<script src='http://localhost/NewProject/page.js'></script></body>";
 
-?>
+echo "<script src='http://localhost/NewProject/page.js'></script></body>";

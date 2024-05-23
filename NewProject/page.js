@@ -2,9 +2,10 @@ const voti = document.getElementsByClassName('table-success');
 
 document.addEventListener("DOMContentLoaded", function(){
     for(let i = 0; i < voti.length; i++){
-        if(voti[i].innerHTML < "5"){
+        let voto = parseFloat(voti[i].innerHTML);
+        if(voto < "5"){
             voti[i].classList.add('table-danger');
-        }else if(voti[i].innerHTML >= "5" && voti[i].innerHTML <= "5.9"){
+        }else if(voto >= "5" && voto <= "5.9"){
             voti[i].classList.add('table-warning');
         }
     }
