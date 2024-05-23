@@ -163,3 +163,4 @@ echo "
     </div>";
 
 echo "<script src='http://localhost/NewProject/page.js'></script></body>";
+?>
