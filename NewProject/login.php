@@ -20,7 +20,7 @@ $c = $_POST['codice'];
 $p = $_POST['password'];
 
 if (!ctype_alnum($c) || !ctype_alnum($p)) {
-    exit("Puoi inserire solo caratteri alfanumerici");
+    exit("<h3 class='text-center'>Puoi inserire solo caratteri alfanumerici</h3>");
 }
 
 $_SESSION['codice'] = $c;
@@ -61,7 +61,6 @@ if ($res = $connessione->query($tab1)) {
 
                 while ($row = $resq1->fetch_assoc()) {
                     $materia = $row['MateriaNome'];
-
                     
                     if ($materia !== $current_materia) {
                         if ($current_materia !== null) {
@@ -82,7 +81,6 @@ if ($res = $connessione->query($tab1)) {
 
                         $current_materia = $materia;
                     }
-
                     
                     echo "<tr>
                     <td>" . $row["Data"] . "</td>
@@ -174,8 +172,6 @@ if ($res = $connessione->query($tab1)) {
         }
     }
 }
-
-
 
 echo "<script src='http://localhost/NewProject/page.js'></script></body>";
 ?>
