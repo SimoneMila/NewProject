@@ -21,7 +21,18 @@ $data = $_POST['data'];
 $v = $_POST['valutazione'];
 $des = $connessione->real_escape_string($_POST['descrizione']);
 $cs = $_POST['studente'];
-$m = $_POST['materia'];
+
+$q0 = "SELECT *
+        FROM materie
+        WHERE FK_Professore = '$c'";
+
+$resq0 = $connessione->query($q0);
+
+if($rowq0 = $resq0->num_rows == 1){
+    $m = $_POST['materia'];
+}else{
+    $m = $_POST['materia_selezionata'];
+}
 
 $q1 = "INSERT INTO Voti(Data, Valutazione, Materia, Descrizione, FK_Studente, FK_Professore)
         VALUES('$data', $v, '$m', '$des', '$cs', '$c')";

@@ -1,7 +1,7 @@
 <?php
-echo"<head><link rel='shortcut icon' type='image/png' href='http://localhost/NewProject/img/favicon.png'></head>";
+echo "<head><link rel='shortcut icon' type='image/png' href='http://localhost/NewProject/img/favicon.png'></head>";
 echo "<head><link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'></head>";
-echo"<head><link rel='stylesheet' href='http://localhost/NewProject/style.css'></head>";
+echo "<head><link rel='stylesheet' href='http://localhost/NewProject/style.css'></head>";
 
 session_start();
 
@@ -43,7 +43,7 @@ echo "
 $tab1 = "SELECT * FROM Studenti WHERE Codice_Studente = '$c' AND Password = '$p'";
 if ($res = $connessione->query($tab1)) {
     if ($res->num_rows > 0) {
-        echo"
+        echo "
         <div class='container-md text-center mb-5'>
             <h1>Valutazioni</h1>
         </div>";
@@ -61,7 +61,7 @@ if ($res = $connessione->query($tab1)) {
 
                 while ($row = $resq1->fetch_assoc()) {
                     $materia = $row['MateriaNome'];
-                    
+
                     if ($materia !== $current_materia) {
                         if ($current_materia !== null) {
                             echo "</tbody></table>";
@@ -81,7 +81,7 @@ if ($res = $connessione->query($tab1)) {
 
                         $current_materia = $materia;
                     }
-                    
+
                     echo "<tr>
                     <td>" . $row["Data"] . "</td>
                     <td class='table-success'>" . $row["Valutazione"] . "</td>
@@ -92,7 +92,60 @@ if ($res = $connessione->query($tab1)) {
                 }
 
                 echo "</tbody></table>";
-            } else {
+
+                $media = "SELECT AVG(Valutazione)
+                    FROM Voti
+                    INNER JOIN Studenti ON FK_Studente = Codice_Studente
+                    WHERE FK_Studente = '$c'";
+                if ($resm = $connessione->query($media)) {
+                    echo "
+                    <div class='container-md text-center mb-4'>
+                        <h2>Media:</h2>
+                    </div>";
+
+                    while ($rowm = $resm->fetch_array()) {
+                        echo "<div id='media' class='container-md text-center'>" . number_format((float)$rowm['AVG(Valutazione)'], 2, '.', '') . "</div>";
+                        echo "<canvas id='myChart' style='width:100%;max-width:600px;margin:auto;'></canvas>
+                        <script>
+                            const media = document.getElementById('media');
+                            var prova = 10 - media.innerHTML;
+                            var ctx = document.getElementById('myChart').getContext('2d');
+                            var gradient = ctx.createLinearGradient(0, 0, 0, 400);
+
+                            var percent;
+                            if (media.innerHTML < 5) {
+                                percent = media.innerHTML / 5;
+                                gradient.addColorStop(0, 'red');
+                                gradient.addColorStop(percent, 'red');
+                            } else if (media.innerHTML < 6) {
+                                percent = (media.innerHTML - 5) / 1;
+                                gradient.addColorStop(0, 'red');
+                                gradient.addColorStop(percent, 'orange');
+                            } else {
+                                percent = (media.innerHTML - 6) / 4;
+                                gradient.addColorStop(0, 'lime');
+                                gradient.addColorStop(percent, 'lime');
+                            }
+
+                            new Chart('myChart', {
+                                type: 'doughnut',
+                                data: {
+                                    datasets: [{
+                                        backgroundColor: [gradient],
+                                        data: [media.innerHTML, prova]
+                                    }]
+                                },
+                            });
+                        </script>";
+                    }
+                }
+                echo "
+                <div class='container-fluid text-center bottom bg-secondary text-white p-5 mt-5'>
+                    <footer>
+                        <small>©2024 Milazzotto Simone. Designed by Milazzotto Simone</small>
+                    </footer>
+                </div>";
+            }else {
                 echo "<h3 class='text-center'>Non hai ancora nessun voto!</h3>";
                 echo "
                 <div class='container-fluid text-center fixed-bottom bg-secondary text-white p-5 mt-5'>
@@ -102,76 +155,22 @@ if ($res = $connessione->query($tab1)) {
                 </div>";
             }
         }
-
-        $media = "SELECT AVG(Valutazione)
-                    FROM Voti
-                    INNER JOIN Studenti ON FK_Studente = Codice_Studente
-                    WHERE FK_Studente = '$c'";
-        if ($resm = $connessione->query($media)) {
+    }
+} else {
+    $tab2 = "SELECT * FROM Professori WHERE Codice_Professore = '$c' AND Password = '$p'";
+    if ($res2 = $connessione->query($tab2)) {
+        if ($res2->num_rows > 0) {
+            header("Location: http://localhost/NewProject/Professori/carica.php");
+        } else {
+            echo "<h3 class='text-center'>Email o Password Errati</h3>";
             echo "
-                <div class='container-md text-center mb-4'>
-                    <h2>Media:</h2>
-                </div>
-            ";
-            while ($rowm = $resm->fetch_array()) {
-                echo "<div id='media' class='container-md text-center'>" . number_format((float)$rowm['AVG(Valutazione)'], 2, '.', '') . "</div>";
-                echo "<canvas id='myChart' style='width:100%;max-width:600px;margin:auto;'></canvas>
-                <script>
-                    const media = document.getElementById('media');
-                    var prova = 10 - media.innerHTML;
-                    var ctx = document.getElementById('myChart').getContext('2d');
-                    var gradient = ctx.createLinearGradient(0, 0, 0, 400);
-
-                    var percent;
-                    if (media.innerHTML < 5) {
-                        percent = media.innerHTML / 5;
-                        gradient.addColorStop(0, 'red');
-                        gradient.addColorStop(percent, 'red');
-                    } else if (media.innerHTML < 6) {
-                        percent = (media.innerHTML - 5) / 1;
-                        gradient.addColorStop(0, 'red');
-                        gradient.addColorStop(percent, 'orange');
-                    } else {
-                        percent = (media.innerHTML - 6) / 4;
-                        gradient.addColorStop(0, 'lime');
-                        gradient.addColorStop(percent, 'lime');
-                    }
-
-                    new Chart('myChart', {
-                        type: 'doughnut',
-                        data: {
-                            datasets: [{
-                                backgroundColor: [gradient],
-                                data: [media.innerHTML, prova]
-                            }]
-                        },
-                    });
-                </script>";
-            }
-            echo "
-            <div class='container-fluid text-center bottom bg-secondary text-white p-5 mt-5'>
+            <div class='container-fluid text-center fixed-bottom bg-secondary text-white p-5 mt-5'>
                 <footer>
                     <small>©2024 Milazzotto Simone. Designed by Milazzotto Simone</small>
                 </footer>
             </div>";
         }
-    } else {
-        $tab2 = "SELECT * FROM Professori WHERE Codice_Professore = '$c' AND Password = '$p'";
-        if ($res2 = $connessione->query($tab2)) {
-            if ($res2->num_rows > 0) {
-                header("Location: http://localhost/NewProject/Professori/carica.php");
-            } else {
-                echo"<h3 class='text-center'>Email o Password Errati</h3>";
-                echo "
-                <div class='container-fluid text-center fixed-bottom bg-secondary text-white p-5 mt-5'>
-                    <footer>
-                        <small>©2024 Milazzotto Simone. Designed by Milazzotto Simone</small>
-                    </footer>
-                </div>";
-            }
-        }
     }
 }
 
 echo "<script src='http://localhost/NewProject/page.js'></script></body>";
-?>

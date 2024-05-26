@@ -120,11 +120,11 @@
                             $res_materia_unica = $connessione->query($sql_materia_unica);
                             $row_materia_unica = $res_materia_unica->fetch_assoc();
                             $materia_unica_nome = $row_materia_unica['MateriaNome'];
-                            echo '<select name="materia" class="form-select" aria-label="Default select example" required disabled>';
+                            echo '<select name="materia" class="form-select" aria-label="Default select example" required>';
                             echo "<option value='$materia_unica_nome' selected>$materia_unica_nome</option>";
                             echo '</select>';
                         } else {
-                            echo '<select name="materia" class="form-select" aria-label="Default select example" required>';
+                            echo '<select name="materia_selezionata" class="form-select" aria-label="Default select example" required>';
                             while ($row_materie = $res_materie->fetch_assoc()) {
                                 echo "<option value='" . $row_materie['MateriaNome'] . "'>" . $row_materie['MateriaNome'] . "</option>";
                             }
@@ -140,8 +140,6 @@
                     <input type="submit" class="btn btn-dark" id="button" value="Invia">
                 </div>
             </div>
-
-            <input type="hidden" name="materia_selezionata" value="<?php echo $valore_materia_selezionata; ?>">
         </form>
 
         <div class="container-fluid text-center fixed-bottom bg-secondary text-white p-5">
