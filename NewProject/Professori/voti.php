@@ -46,6 +46,21 @@ if($resq2 = $connessione->query($q2)){
                 </tr>";
             }
         echo"</tbody></table>";
+        if($resq2->num_rows >= 10){
+            echo"
+            <div class='container-fluid text-center bottom bg-secondary text-white p-5'>
+                <footer>
+                    <small>©2024 Milazzotto Simone. Designed by Milazzotto Simone</small>
+                </footer>
+            </div>";
+        }else{
+            echo"
+            <div class='container-fluid text-center fixed-bottom bg-secondary text-white p-5'>
+                <footer>
+                    <small>©2024 Milazzotto Simone. Designed by Milazzotto Simone</small>
+                </footer>
+            </div>";
+        }
     }
 }
 

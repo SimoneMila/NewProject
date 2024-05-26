@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Professori</title>
+    <link rel="shortcut icon" type="image/png" href="http://localhost/NewProject/img/favicon.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 
@@ -110,25 +111,19 @@
                     FROM Materie
                     WHERE Materie.FK_Professore = '$professore_id'";
                     $res_materie = $connessione->query($sql_materie);
-                    // Controlla il numero di materie associate al professore
                     $sql_count_materie = "SELECT COUNT(*) as num_materie FROM Materie WHERE FK_Professore = '$professore_id'";
                     $res_count_materie = $connessione->query($sql_count_materie);
                     if ($res_count_materie && $res_count_materie->num_rows > 0) {
                         $row_count_materie = $res_count_materie->fetch_assoc();
-                        // Se il professore ha solo una materia
                         if ($row_count_materie['num_materie'] == 1) {
-                            // Recupera il nome della materia
                             $sql_materia_unica = "SELECT ID_Materia, Nome AS MateriaNome FROM Materie WHERE FK_Professore = '$professore_id'";
                             $res_materia_unica = $connessione->query($sql_materia_unica);
                             $row_materia_unica = $res_materia_unica->fetch_assoc();
                             $materia_unica_nome = $row_materia_unica['MateriaNome'];
-                            //$materia_unica_codice = $row_materia_unica['ID_Materia'];
-                            // Mostra la select con la materia già selezionata e disabilitata
                             echo '<select name="materia" class="form-select" aria-label="Default select example" required disabled>';
                             echo "<option value='$materia_unica_nome' selected>$materia_unica_nome</option>";
                             echo '</select>';
                         } else {
-                            // Se il professore ha più di una materia, mostra la select con le materie disponibili
                             echo '<select name="materia" class="form-select" aria-label="Default select example" required>';
                             while ($row_materie = $res_materie->fetch_assoc()) {
                                 echo "<option value='" . $row_materie['MateriaNome'] . "'>" . $row_materie['MateriaNome'] . "</option>";
@@ -157,5 +152,4 @@
 
         <script src="http://localhost/NewProject/page.js"></script>
 </body>
-
 </html>

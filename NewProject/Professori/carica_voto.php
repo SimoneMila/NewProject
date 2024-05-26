@@ -1,5 +1,5 @@
 <?php
-
+echo"<head><link rel='shortcut icon' type='image/png' href='http://localhost/NewProject/img/favicon.png'></head>";
 echo"<head><link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'></head>";
 
 session_start();
@@ -22,18 +22,6 @@ $v = $_POST['valutazione'];
 $des = $connessione->real_escape_string($_POST['descrizione']);
 $cs = $_POST['studente'];
 $m = $_POST['materia'];
-
-/*$q0 = "SELECT Materie.Nome
-        FROM Materie
-        INNER JOIN Professori
-        ON FK_Professore = Codice_Professore
-        WHERE FK_Professore = '$c'";
-
-if($res0 = $connessione->query($q0)){
-    while($row0 = $res0->fetch_array()){
-        $m = $row0["Nome"];
-    }
-}*/
 
 $q1 = "INSERT INTO Voti(Data, Valutazione, Materia, Descrizione, FK_Studente, FK_Professore)
         VALUES('$data', $v, '$m', '$des', '$cs', '$c')";

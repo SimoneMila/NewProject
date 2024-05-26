@@ -1,6 +1,7 @@
 <?php
-
+echo"<head><link rel='shortcut icon' type='image/png' href='http://localhost/NewProject/img/favicon.png'></head>";
 echo "<head><link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'></head>";
+echo"<head><link rel='stylesheet' href='http://localhost/NewProject/style.css'></head>";
 
 session_start();
 
@@ -37,15 +38,16 @@ echo "
                 <li class='nav-item'><a class='nav-link text-primary' href='http://localhost/NewProject/index.html'>Log Out</a></li>
             </ul>
         </div>
-    </nav>
-
-    <div class='container-md text-center mb-5'>
-        <h1>Valutazioni</h1>
-    </div>";
+    </nav>";
 
 $tab1 = "SELECT * FROM Studenti WHERE Codice_Studente = '$c' AND Password = '$p'";
 if ($res = $connessione->query($tab1)) {
     if ($res->num_rows > 0) {
+        echo"
+        <div class='container-md text-center mb-5'>
+            <h1>Valutazioni</h1>
+        </div>";
+
         $q1 = "SELECT Voti.Data, Voti.Valutazione, Voti.Descrizione, Voti.Materia AS MateriaNome, Professori.Cognome, Professori.Nome
                 FROM Voti
                 INNER JOIN Professori
@@ -93,7 +95,13 @@ if ($res = $connessione->query($tab1)) {
 
                 echo "</tbody></table>";
             } else {
-                echo "Non hai ancora nessun voto!";
+                echo "<h3 class='text-center'>Non hai ancora nessun voto!</h3>";
+                echo "
+                <div class='container-fluid text-center fixed-bottom bg-secondary text-white p-5 mt-5'>
+                    <footer>
+                        <small>©2024 Milazzotto Simone. Designed by Milazzotto Simone</small>
+                    </footer>
+                </div>";
             }
         }
 
@@ -142,6 +150,12 @@ if ($res = $connessione->query($tab1)) {
                     });
                 </script>";
             }
+            echo "
+            <div class='container-fluid text-center bottom bg-secondary text-white p-5 mt-5'>
+                <footer>
+                    <small>©2024 Milazzotto Simone. Designed by Milazzotto Simone</small>
+                </footer>
+            </div>";
         }
     } else {
         $tab2 = "SELECT * FROM Professori WHERE Codice_Professore = '$c' AND Password = '$p'";
@@ -149,18 +163,19 @@ if ($res = $connessione->query($tab1)) {
             if ($res2->num_rows > 0) {
                 header("Location: http://localhost/NewProject/Professori/carica.php");
             } else {
-                echo "Email o Password Errati";
+                echo"<h3 class='text-center'>Email o Password Errati</h3>";
+                echo "
+                <div class='container-fluid text-center fixed-bottom bg-secondary text-white p-5 mt-5'>
+                    <footer>
+                        <small>©2024 Milazzotto Simone. Designed by Milazzotto Simone</small>
+                    </footer>
+                </div>";
             }
         }
     }
 }
 
-echo "
-    <div class='container-fluid text-center bottom bg-secondary text-white p-5 mt-5'>
-        <footer>
-            <small>©2024 Milazzotto Simone. Designed by Milazzotto Simone</small>
-        </footer>
-    </div>";
+
 
 echo "<script src='http://localhost/NewProject/page.js'></script></body>";
 ?>
